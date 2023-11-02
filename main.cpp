@@ -1,17 +1,19 @@
 #include <iostream>
 #include <time.h>
+#include <windows.h>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
-#define width 320
-#define height 180
+#define width 800
+#define height 600
 #define resolution width * height
 int main()
 {
 	//初值设置
 	bool skippable = 0;
+	bool debug = 1;
 	int ch;
 	int max = 10;
-	unsigned int iteration = 200;
+	unsigned int iteration = 50;
 	unsigned short* result = (unsigned short*)malloc(sizeof(unsigned short) * resolution);
 	double centre[2] = { 0.0,0.0 };
 	double step = 4.0 / width;
@@ -22,7 +24,13 @@ int main()
 	double* temp = (double*)malloc(sizeof(double*) * resolution);
 	double delta_time = 0;
 	int times = 0;
-	cv::namedWindow("image", cv::WindowFlags::WINDOW_AUTOSIZE);
+	if (debug == 1)
+	{
+		system("cls");
+		std::cout << "已开启debug" << std::endl << "默认分辨率：" << height << "x" << width << std::endl << "3秒后启动" << std::endl;
+		Sleep(3000);
+	}
+	cv::namedWindow("image", cv::WindowFlags::WINDOW_FULLSCREEN);
 	system("cls");
 	while (true)
 	{
@@ -78,8 +86,8 @@ int main()
 		//键值检测
 		ch = cv::waitKey(0);    //在键盘敲入字符前程序处于等待状态;获取键值
 		if (ch == 27) { break; }//退出
-		else if (ch == 97)	{ centre[0] -= 0.01 * width * step;		}//向左:a
-		else if (ch == 100) { centre[0] += 0.01 * width * step;		}//向右:d
+		else if (ch == 97)	{ centre[0] -= 0.01 * width * step;	}//向左:a
+		else if (ch == 100) { centre[0] += 0.01 * width * step;	}//向右:d
 		else if (ch == 115) { centre[1] -= 0.01 * width * step;	}//向下:s
 		else if (ch == 119) { centre[1] += 0.01 * width * step;	}//向上:w
 		else if (ch == 113) { step *= 0.95;	}//放大:q
